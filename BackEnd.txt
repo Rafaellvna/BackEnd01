@@ -1,0 +1,112 @@
+1 - Instalar o git
+2 - Instalar o node
+3 - Instalar o insomnia
+
+// Backend
+
+npm init
+npm i express
+node index.js
+npm i nodemon
+npx nodemon
+
+//////////////////////////////////////////////////////////////////////////////////
+
+const express = require('express')
+const app = express()
+app.use(express.urlencoded({extended: true}))
+const Lista1Controller = require('./controllers/Lista1Controllers')
+
+//EXEMPLOS
+app.get('/', (req, res) => {
+    res.send('*** Principal /')
+})
+
+app.get('/teste', (req, res) => {
+    res.send('+++ /teste')
+})
+
+app.get('/orion', (req, res) => {
+    res.send('--- /orion')
+})
+
+app.get('/media', (req, res) => {
+    
+    const n1 = 22
+    const n2 = 30
+    const n3 = 18
+    const n4 = 4
+    
+    const media = (n1 + n2 + n3 + n4) /4
+    const resposta = {}
+    resposta.mensagem = 'Média é: ' + media
+    resposta.soma = n1 + n2 + n3 + n4
+    res.json(resposta)
+})
+////////////////////////////////////////////////////////////////////
+
+//EXERCÍCIOS
+app.post('/Ex1', Lista1Controller.Ex1)
+app.post('/Ex2', Lista1Controller.Ex2)
+app.post('/Ex3', Lista1Controller.Ex3)
+app.post('/Ex4', Lista1Controller.Ex4)
+app.post('/Ex5', Lista1Controller.Ex5)
+app.post('/Ex6', Lista1Controller.Ex6)
+app.post('/Ex7', Lista1Controller.Ex7)
+app.post('/Ex8', Lista1Controller.Ex8)
+app.post('/Ex9', Lista1Controller.Ex9)
+
+app.listen(3334, () => {
+    console.log('Servidor ON')
+})
+
+/////////////////////////////////////////////////////////////////////////////////
+
+ADONIS JS
+
+//Criando projeto adonis
+npm init adonis-ts-app@latest hello-world
+
+//Ligar o Servidor
+node ace serve --watch
+
+//Cria um Controller
+npm i --global @adonis/cli
+node ace make:controller Lista1
+
+//Cria o Lucid -> Banco de Dados
+npm i @adonisjs/lucid
+node ace configure @adonisjs/lucid
+
+//Migration/Criador de Tabelas
+node ace make:migration users
+node ace migration:run
+node ace migration:rollback -> Desfaz a última execução
+node ace migration:reset -> Apaga todas as tabelas
+node ace migration:refresh -> Junta o 'migration:reset' + 'migration:run'
+node ace migration:refresh --seed -> Apaga o Banco de Dados e executa novamente juntamente com o os registros do seed
+
+//Cria o Models -> Modelo do Banco de Dados
+node ace make:model Curso
+node ace make:model Curso -m -> Cria as colunas do Model automaticamente junto com o Migration.
+
+//Seeders -> Cria um arquivo pra colocar os registros no Banco de Dados
+node ace make:seeder curso -> Cria o Seeder
+node ace db:seed -> Executa o seed
+node ace db:seed -i -> Seleciona as tabelas que você quer executar
+
+//Validate
+node ace make:validator CursoValidator
+
+//Lista as Rotas
+node ace list:routes
+
+//Autenticação
+npm i @adonisjs/auth
+node ace configure @adonisjs/auth -> Lucid - API - User - Yes Migration - Database - Yes Migration de novo
+npm i phc-argon2
+
+//Abrir o arquivo ./start/kernel
+Server.middleware.registerNamed({
+  auth: () => import('App/Middleware/Auth')
+})
